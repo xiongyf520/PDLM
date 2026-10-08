@@ -1,0 +1,5 @@
+public_name	checkpoint_filename	esm2_backbone	masking_strategy	best_epoch	selection_metric	sha256	config_file	status	download_url	code_version	software_license	model_license
+PDLM-35M-base	PDLM-35M-base.safetensors	facebook/esm2_t12_35M_UR50D	uniform	TBD	TBD	TBD	configs/pretrain/pdlm_35m_base.yaml	pending_verification	TBD	TBD	TBD	TBD
+PDLM-150M-base	PDLM-150M-base.safetensors	facebook/esm2_t30_150M_UR50D	uniform	TBD	TBD	TBD	configs/pretrain/pdlm_150m_base.yaml	pending_verification	TBD	TBD	TBD	TBD
+PDLM-35M-domain	PDLM-35M-domain.safetensors	facebook/esm2_t12_35M_UR50D	domain	TBD	TBD	TBD	configs/pretrain/pdlm_35m_domain.yaml	pending_verification	TBD	TBD	TBD	TBD
+PDLM-150M-domain	PDLM-150M-domain.safetensors	facebook/esm2_t30_150M_UR50D	domain	TBD	TBD	TBD	configs/pretrain/pdlm_150m_domain.yaml	pending_verification	TBD	TBD	TBD	TBD

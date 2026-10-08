@@ -1,0 +1,5 @@
+{"id":"train_1","protein_seq":"MKTAYIAKQRQISFVKSHFS","dna_seq":"ATCGATCG","binding_mask":[0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0],"has_annotation":true}
+{"id":"train_2","protein_seq":"ACDEFGHIKLMNPQRSTVWY","dna_seq":"GATTACA","binding_mask":[0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0],"has_annotation":true}
+{"id":"train_3","protein_seq":"MNNIRRVAIACGTSRQLAEL","dna_seq":"CGTACGTA","has_annotation":false}
+{"id":"train_4","protein_seq":"MELKQKVEQLKQQNADLAAA","dna_seq":"TGCATGCA","has_annotation":false}
+

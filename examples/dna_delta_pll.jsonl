@@ -1,0 +1,2 @@
+{"id":"protein_context_change","reference_protein_seq":"MKTAYIAKQRQISFVKSHFS","variant_protein_seq":"MATAYIAKQRQISFVKSHFS","dna_seq":"ATCGATCG"}
+{"id":"dna_sequence_change","protein_seq":"MKTAYIAKQRQISFVKSHFS","reference_dna_seq":"ATCGATCG","variant_dna_seq":"ATCGATTG"}

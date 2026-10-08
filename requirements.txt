@@ -1,0 +1,6 @@
+numpy>=1.23,<2
+PyYAML>=6,<7
+safetensors>=0.4,<1
+torch>=2.0,<3
+tqdm>=4.65
+transformers==4.44.2

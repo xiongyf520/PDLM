@@ -1,0 +1,34 @@
+metadata:
+  public_name: PDLM-150M-domain
+  config_status: template_requires_checkpoint_verification
+paths:
+  root: ../..
+  train_file: examples/toy_train.jsonl
+  val_file: examples/toy_val.jsonl
+  output_dir: outputs/pdlm_150m_domain
+model:
+  esm2_model: facebook/esm2_t30_150M_UR50D
+  dna_vocab_size: 8
+  max_length: 800
+  dropout: 0.1
+masking:
+  strategy: domain
+  binding_probability: 0.30
+  other_probability: 0.10
+  fallback_probability: 0.15
+  dna_probability: 0.20
+  ensure_one_mask: true
+loss:
+  protein_weight: 0.5
+  dna_weight: 0.5
+training:
+  seed: 42
+  epochs: 40
+  batch_size: 8
+  learning_rate: 0.0001
+  warmup_steps: 500
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  reverse_complement_probability: 0.3
+  swap_order_probability: 0.5
+
