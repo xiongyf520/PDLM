@@ -1,6 +1,62 @@
 # Release status
 
-## Version 0.2.0
+## Version 0.3.0
+
+Release scope: core model, executable training demos, zero-shot scoring, and
+representation extraction. The full research training dataset and trained model
+weights are not distributed with this code package. Synthetic demo training
+demonstrates software operation, not manuscript performance.
+
+Changes prepared on 2026-11-03:
+
+- Replaced four unverified pretraining templates with base/domain demo YAMLs.
+- Added 80 training and 20 validation synthetic pairs, with seed 42 and no shared
+  protein or DNA sequences. Pairings and domain annotations are artificial.
+- Added deterministic demo generation and an example-format guide.
+- Removed three redundant script wrappers; installed CLI commands remain.
+- Removed the duplicate requirements file; dependencies live in pyproject.toml.
+- Merged repository guidance into the README and weight documentation.
+- Documented one shared Hugging Face repository for all four variants, with
+  shared configuration/tokenizer folders by model size and selective downloads.
+- Model hosting target: https://huggingface.co/xiongyf/PDLM (currently private;
+  final weight upload is being prepared).
+- Preserved model architecture, tokenization, training, masking, scoring,
+  embedding extraction, and strict checkpoint/export behavior.
+- Extended offline checks to exercise both demo configurations and demo data.
+
+### Local verification on 2026-11-03
+
+Editable installation passed in a temporary CPU test environment using Python
+3.11.5, PyTorch 2.0.1, Transformers 4.44.2, NumPy 1.25.2, PyYAML 6.0.1,
+and Safetensors 0.8.0.
+
+- Smoke test: passed (49.86 s, including cold process startup).
+- Integration test: passed (35.71 s). Checks covered deterministic generation,
+  80/20 counts, unique IDs/sequences, synthetic annotation alignment, refusal
+  to overwrite different demo data, both demo training strategies, resume,
+  strict loading, tensor-identical export, scoring, and embeddings.
+- Installed `pdlm-train`, `pdlm-score`, and `pdlm-embed` help commands: passed.
+- Python syntax, demo configuration paths, local Markdown links, and manifest
+  checks: passed.
+
+The tests use a tiny randomly initialized backbone and do not download ESM2
+weights or validate research-model performance.
+
+Current limitations:
+
+- Final research checkpoint loading and output equivalence with the original
+  evaluation environment remain unverified.
+- The demo YAMLs are not the configurations of the final research weights.
+  The weight manifest leaves actual configuration references as TBD.
+- Weight URLs, checkpoint metadata, and software/model licenses remain pending.
+- Manuscript-specific downstream predictors and scientific benchmarks are
+  outside this package.
+- No claim of complete manuscript reproduction is made.
+
+## Version 0.2.0 — historical record
+
+The following records describe the previous release before the demo cleanup;
+its four training templates have been replaced in 0.3.0.
 
 This core package is prepared for a private code repository. Its documentation,
 source code, configuration files, and examples are in English. No Chinese

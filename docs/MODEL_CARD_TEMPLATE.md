@@ -1,6 +1,6 @@
 # PDLM model card template
 
-Complete one card per variant before uploading weights. Replace this title and
+Complete one card for the shared PDLM model repository. Replace this title and
 all bracketed fields. Do not present unverified settings as final metadata.
 
 ## Model description
@@ -8,21 +8,29 @@ all bracketed fields. Do not present unverified settings as final metadata.
 PDLM jointly encodes protein and DNA using an ESM2-initialized shared Transformer,
 separate token embeddings, and separate MLM prediction heads.
 
-- Variant: [PDLM-35M-base / PDLM-35M-domain / PDLM-150M-base / PDLM-150M-domain]
-- ESM2 backbone: [official identifier]
-- Masking: [uniform / domain-aware]
+- Model repository: [xiongyf/PDLM](https://huggingface.co/xiongyf/PDLM)
 - Code repository and release tag: [URL and tag]
-- Weight filename and SHA256: [filename and checksum]
 - Software license: [confirmed license]
 - Model license: [confirmed license]
 - Manuscript: [title, authors, DOI or preprint URL]
+
+| Variant | Weight file | ESM2 configuration/tokenizer | Masking | SHA256 |
+| --- | --- | --- | --- | --- |
+| PDLM-35M-base | PDLM-35M-base.safetensors | esm2/35M | uniform | [checksum] |
+| PDLM-35M-domain | PDLM-35M-domain.safetensors | esm2/35M | domain-aware | [checksum] |
+| PDLM-150M-base | PDLM-150M-base.safetensors | esm2/150M | uniform | [checksum] |
+| PDLM-150M-domain | PDLM-150M-domain.safetensors | esm2/150M | domain-aware | [checksum] |
+
+The 35M variants use `facebook/esm2_t12_35M_UR50D`; the 150M variants use
+`facebook/esm2_t30_150M_UR50D`.
 
 ## Use
 
 The model supports zero-shot mutation scoring, protein-conditioned DNA scoring,
 and representation extraction. Load it using the linked `pdlm` package, not a
 standard ESM2 `AutoModel` loader. Include installation and inference commands
-for this variant.
+for the selected variant. Document how to download an individual weight file
+and the matching configuration/tokenizer from this shared repository.
 
 ## Training
 
@@ -31,6 +39,8 @@ for this variant.
 - Configuration: [verified filename]
 - Software and hardware: [versions and devices]
 - Checkpoint epoch and selection criterion: [confirmed values]
+
+Report variant-specific settings separately when they differ.
 
 ## Evaluation
 

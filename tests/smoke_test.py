@@ -72,7 +72,7 @@ def main():
                     "other_probability": 0.10, "fallback_probability": 0.15,
                     "dna_probability": 0.20, "ensure_one_mask": True}, max_length=64, seed=42
     )
-    domain_batch = domain([dataset[0], dataset[2]])
+    domain_batch = domain([dataset[0], dataset[1]])
     assert domain_batch["protein_labels"].ne(-100).sum() >= 2
 
     dll = protein_delta_ll(model, tokenizer, "MKTAYIAK", "ATCG", "K2A", max_length=64)

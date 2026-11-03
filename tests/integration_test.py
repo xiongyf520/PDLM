@@ -55,25 +55,53 @@ def main():
         tokenizer.save_pretrained(config_only)
         for split in ["train", "val"]:
             shutil.copy2(ROOT / "examples" / f"toy_{split}.jsonl", work / f"{split}.jsonl")
-        training = {
-            "paths": {"root": ".", "train_file": "train.jsonl", "val_file": "val.jsonl", "output_dir": "run"},
-            "model": {"esm2_model": "esm2", "dna_vocab_size": 8, "dropout": 0.0, "max_length": 64},
-            "masking": {"strategy": "domain", "binding_probability": 0.3,
-                        "other_probability": 0.1, "fallback_probability": 0.15, "dna_probability": 0.2},
-            "training": {"seed": 42, "epochs": 1, "batch_size": 2, "learning_rate": 0.001,
-                         "warmup_steps": 0, "reverse_complement_probability": 0.3, "swap_order_probability": 0.5},
-        }
+        generated = work / "generated"
+        run(ROOT / "scripts" / "generate_demo.py", "--output-dir", generated)
+        run(ROOT / "scripts" / "generate_demo.py", "--output-dir", generated)
+        partitions = []
+        for split, count in [("train", 80), ("val", 20)]:
+            original = ROOT / "examples" / f"toy_{split}.jsonl"
+            assert original.read_bytes() == (generated / original.name).read_bytes()
+            records = [json.loads(line) for line in original.read_text().splitlines()]
+            assert len(records) == count
+            assert sum(record["has_annotation"] for record in records) == count // 2
+            for record in records:
+                if record["has_annotation"]:
+                    assert len(record["binding_mask"]) == len(record["protein_seq"])
+                    assert sum(record["binding_mask"]) == 5
+            partitions.append(records)
+        for field in ["id", "protein_seq", "dna_seq"]:
+            assert len({record[field] for records in partitions for record in records}) == 100
+        (generated / "toy_val.jsonl").write_text("keep existing data\n")
+        refused = subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / "generate_demo.py"),
+             "--output-dir", str(generated)], cwd=ROOT, text=True, capture_output=True
+        )
+        assert refused.returncode != 0
+        assert (generated / "toy_val.jsonl").read_text() == "keep existing data\n"
+
         config_path = work / "train.yaml"
-        config_path.write_text(yaml.safe_dump(training))
-        run("-m", "pdlm.train", "--config", config_path)
-        checkpoint = work / "run" / "checkpoint_best.pt"
-        assert checkpoint.exists()
-        history = json.loads((work / "run" / "metrics.json").read_text())
-        assert np.isfinite(history[0]["val_loss"])
+        for strategy in ["base", "domain"]:
+            training = yaml.safe_load((ROOT / "configs" / "demo" / f"{strategy}.yaml").read_text())
+            assert training["metadata"]["config_status"] == "synthetic_demo_only"
+            training["paths"] = {
+                "root": ".", "train_file": "train.jsonl", "val_file": "val.jsonl",
+                "output_dir": f"run_{strategy}",
+            }
+            training["model"]["esm2_model"] = "esm2"
+            training["model"]["dropout"] = 0.0
+            config_path.write_text(yaml.safe_dump(training))
+            run("-m", "pdlm.train", "--config", config_path)
+            run_dir = work / f"run_{strategy}"
+            checkpoint = run_dir / "checkpoint_best.pt"
+            assert checkpoint.exists()
+            history = json.loads((run_dir / "metrics.json").read_text())
+            assert history[0]["epoch"] == 1
+            assert all(np.isfinite(value) for value in history[0].values())
         training["training"]["epochs"] = 2
         config_path.write_text(yaml.safe_dump(training))
         run("-m", "pdlm.train", "--config", config_path, "--resume", checkpoint)
-        resumed = json.loads((work / "run" / "metrics.json").read_text())
+        resumed = json.loads((run_dir / "metrics.json").read_text())
         assert resumed[0]["epoch"] == 2
         model, _ = load_checkpoint(checkpoint, config_only)
         weights = work / "model.safetensors"
@@ -107,7 +135,7 @@ def main():
             with np.load(output) as data:
                 assert data["embeddings"].shape[1] == width
                 assert np.isfinite(data["embeddings"]).all()
-    print("PDLM offline integration test passed: training, resume, strict checkpoint loading, export, scoring, embeddings")
+    print("PDLM offline integration test passed: deterministic demo data, base/domain training, resume, strict checkpoint loading, export, scoring, embeddings")
 
 
 if __name__ == "__main__":
