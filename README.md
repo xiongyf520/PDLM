@@ -3,7 +3,7 @@
 Source code: [GitHub](https://github.com/xiongyf520/PDLM)
 
 Model repository: [Hugging Face — xiongyf/PDLM](https://huggingface.co/xiongyf/PDLM)
-(currently private; final weight upload is being prepared).
+(currently private; four research checkpoints are available to authorized users).
 See [weight packaging and Hugging Face setup](weights/README.md).
 
 PDLM jointly models protein and DNA sequences with a shared ESM2-initialized
@@ -128,6 +128,17 @@ training/inference check without an ESM2 download, run
 ## Zero-shot scoring
 
 All commands below require trained PDLM weights, which are not bundled.
+Download the two 35M variants and their configuration/tokenizer with the optional
+Hugging Face CLI. Private-repository access requires an authorized HF account:
+
+```bash
+hf auth login
+hf download xiongyf/PDLM --local-dir weights/PDLM \
+  --include "PDLM-35M-*.safetensors" "esm2/35M/*" "checkpoint_manifest.tsv"
+```
+
+The 150M variants are in the same repository; download their weight files and
+`esm2/150M/*` when needed. See [weight hosting](weights/README.md).
 CLI paths are relative to the current working directory. Single substitutions
 use one-based numbering, for example `K2A`.
 
@@ -138,8 +149,8 @@ log-probability at a single masked amino-acid position.
 
 ```bash
 pdlm-score \
-  --checkpoint weights/PDLM-35M-base.safetensors \
-  --esm2-model facebook/esm2_t12_35M_UR50D \
+  --checkpoint weights/PDLM/PDLM-35M-base.safetensors \
+  --esm2-model weights/PDLM/esm2/35M \
   --input examples/protein_only_variants.jsonl \
   --output outputs/protein_only_scores.jsonl \
   --mode protein-dll
@@ -158,8 +169,8 @@ binding probability or physical affinity.
 
 ```bash
 pdlm-score \
-  --checkpoint weights/PDLM-35M-domain.safetensors \
-  --esm2-model facebook/esm2_t12_35M_UR50D \
+  --checkpoint weights/PDLM/PDLM-35M-domain.safetensors \
+  --esm2-model weights/PDLM/esm2/35M \
   --input examples/toy_pairs.jsonl \
   --output outputs/dna_pll.jsonl \
   --mode dna-pll
@@ -171,8 +182,8 @@ paired with the same protein.
 
 ```bash
 pdlm-score \
-  --checkpoint weights/PDLM-35M-domain.safetensors \
-  --esm2-model facebook/esm2_t12_35M_UR50D \
+  --checkpoint weights/PDLM/PDLM-35M-domain.safetensors \
+  --esm2-model weights/PDLM/esm2/35M \
   --input examples/dna_delta_pll.jsonl \
   --output outputs/dna_delta_pll.jsonl \
   --mode dna-dpll
@@ -187,8 +198,8 @@ if the full DNA cannot be scored; it does not silently score a shortened DNA.
 
 ```bash
 pdlm-embed \
-  --checkpoint weights/PDLM-35M-base.safetensors \
-  --esm2-model facebook/esm2_t12_35M_UR50D \
+  --checkpoint weights/PDLM/PDLM-35M-base.safetensors \
+  --esm2-model weights/PDLM/esm2/35M \
   --input examples/toy_pairs.jsonl \
   --output outputs/embeddings.npz \
   --mode concat

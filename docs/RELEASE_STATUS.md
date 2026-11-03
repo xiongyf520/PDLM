@@ -19,7 +19,7 @@ Changes prepared on 2026-11-03:
 - Documented one shared Hugging Face repository for all four variants, with
   shared configuration/tokenizer folders by model size and selective downloads.
 - Model hosting target: https://huggingface.co/xiongyf/PDLM (currently private;
-  final weight upload is being prepared).
+  all four research weight files uploaded).
 - Preserved model architecture, tokenization, training, masking, scoring,
   embedding extraction, and strict checkpoint/export behavior.
 - Extended offline checks to exercise both demo configurations and demo data.
@@ -44,14 +44,26 @@ weights or validate research-model performance.
 
 Current limitations:
 
-- Final research checkpoint loading and output equivalence with the original
-  evaluation environment remain unverified.
+- Fixed-input equivalence checks passed for the final 35M-base, 35M-domain,
+  and 150M-base checkpoints. The remaining 150M-domain inference validation
+  was not completed. These are software checks, not benchmark reproduction.
 - The demo YAMLs are not the configurations of the final research weights.
-  The weight manifest leaves actual configuration references as TBD.
-- Weight URLs, checkpoint metadata, and software/model licenses remain pending.
+  Recorded scalar settings recovered from the checkpoints are hosted separately
+  in the model repository.
+- The model repository contains the weight manifest and recorded scalar settings.
+  Checkpoint-selection details and software/model licenses remain pending.
 - Manuscript-specific downstream predictors and scientific benchmarks are
   outside this package.
 - No claim of complete manuscript reproduction is made.
+
+### Private weight upload on 2026-11-03
+
+All four Safetensors files and their configuration/tokenizer files are available
+to authorized users at model revision
+`4c5bafef7730b2138ee9d53fbc85272251bdd7ce`.
+Remote file sizes and SHA256 checksums match the exported files. Optimizer and
+scheduler states and the full research training dataset are not included.
+The repository remains private; no PDLM license was assigned during upload.
 
 ## Version 0.2.0 — historical record
 

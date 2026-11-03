@@ -4,6 +4,14 @@ PDLM weights are distributed separately from the code repository.
 Model files are excluded by `.gitignore`. Place local weights here or pass
 another path to `--checkpoint`.
 
+All four variants were uploaded on 2026-11-03 to the private
+[xiongyf/PDLM repository](https://huggingface.co/xiongyf/PDLM) at revision
+`4c5bafef7730b2138ee9d53fbc85272251bdd7ce`.
+Remote file sizes and SHA256 checksums match the exports.
+The model repository contains the completed `checkpoint_manifest.tsv` and
+`verification.json`. Fixed-input equivalence checks passed for 35M-base,
+35M-domain, and 150M-base; 150M-domain inference validation was not completed.
+
 ## Export for distribution
 
 Export only model tensors. Optimizer state, scheduler state, training records,
@@ -52,7 +60,7 @@ Keep implementation code on GitHub and publish weights on the Hugging Face Hub.
 Use [xiongyf/PDLM](https://huggingface.co/xiongyf/PDLM), containing all four
 variants. Use explicit weight filenames to select the size and masking strategy.
 
-The repository is currently private while the weights are being prepared.
+The repository is currently private and contains all four weight files.
 A model repository is sufficient; a Space is only needed
 if you later want to host an interactive application.
 Choose software and model licenses with the authors before public release.
@@ -68,6 +76,10 @@ PDLM/
 ├── PDLM-150M-base.safetensors
 ├── PDLM-150M-domain.safetensors
 ├── checkpoint_manifest.tsv
+├── pretraining_config_<variant>.json
+├── verification.json
+├── third_party/
+│   └── ESM_LICENSE
 └── esm2/
     ├── 35M/
     │   ├── config.json
@@ -83,7 +95,7 @@ PDLM/
 
 Use [the model-card template](../docs/MODEL_CARD_TEMPLATE.md) for `README.md`.
 Record verified training settings in the card or an accompanying
-`pretraining_config_<variant>.yaml` for each variant. The full research training
+`pretraining_config_<variant>.json` for each variant. The full research training
 dataset is not included in this code release; describe its availability accurately.
 The two `esm2/` subfolders contain the matching ESM2 configuration and tokenizer
 for each size; base and domain variants of the same size share these files.
