@@ -1,23 +1,18 @@
 # PDLM
 
-Source code: [GitHub](https://github.com/xiongyf520/PDLM)
-
-Model repository: [Hugging Face — xiongyf/PDLM](https://huggingface.co/xiongyf/PDLM)
-(currently private; four research checkpoints are available to authorized users).
-See [weight packaging and Hugging Face setup](weights/README.md).
-
 PDLM jointly models protein and DNA sequences with a shared ESM2-initialized
 Transformer, separate token embeddings, and separate masked language modeling
-heads. This package provides continued pretraining, zero-shot sequence scoring,
-and representation extraction.
+heads. This repository provides code for continued pretraining, zero-shot
+sequence scoring, and embedding extraction.
+
+[PDLM model weights on Hugging Face](https://huggingface.co/xiongyf/PDLM)
 
 ## Scope and status
 
-Version `0.3.0` contains the core model, training demos, zero-shot scoring,
-and representation extraction. The full research training dataset, trained PDLM
-weights, and manuscript-specific downstream predictors are not included.
-The 100 synthetic training/validation examples and two demo configurations
-demonstrate executable workflows; they do not reproduce manuscript performance.
+Version `0.3.0` includes two training demos that use 100 synthetic examples
+to illustrate the training and validation workflow. The full research training
+dataset and manuscript-specific downstream predictors are outside the scope of
+this release.
 See [release status](docs/RELEASE_STATUS.md).
 
 | Component | Location | Purpose |
@@ -38,6 +33,8 @@ build appropriate for your hardware before installing PDLM. Training the 35M or
 150M models normally requires a GPU. The offline tests run on a CPU.
 
 ```bash
+git clone https://github.com/xiongyf520/PDLM.git
+cd PDLM
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
@@ -127,18 +124,12 @@ training/inference check without an ESM2 download, run
 
 ## Zero-shot scoring
 
-All commands below require trained PDLM weights, which are not bundled.
-Download the two 35M variants and their configuration/tokenizer with the optional
-Hugging Face CLI. Private-repository access requires an authorized HF account:
+Zero-shot scoring and embedding extraction require a trained PDLM checkpoint
+and its matching ESM2 configuration and tokenizer. The examples below use 35M
+checkpoints in `weights/PDLM/` and the matching ESM2 files in
+`weights/PDLM/esm2/35M/`. For 150M checkpoints, use the corresponding ESM2 files
+in `weights/PDLM/esm2/150M/`.
 
-```bash
-hf auth login
-hf download xiongyf/PDLM --local-dir weights/PDLM \
-  --include "PDLM-35M-*.safetensors" "esm2/35M/*" "checkpoint_manifest.tsv"
-```
-
-The 150M variants are in the same repository; download their weight files and
-`esm2/150M/*` when needed. See [weight hosting](weights/README.md).
 CLI paths are relative to the current working directory. Single substitutions
 use one-based numbering, for example `K2A`.
 
@@ -236,15 +227,11 @@ python tests/integration_test.py
 These offline checks use a tiny synthetic model. They do not validate the four
 final research checkpoints or reproduce scientific performance.
 
-## Release and citation
+## License and citation
 
-The code repository contains source code, demo configurations, synthetic examples,
-tests, documentation, and weight-manifest templates. Full research datasets,
-model files, generated outputs, environments, and credentials are excluded.
-See [model hosting](weights/README.md) for weight distribution.
-Software and model licenses are not yet assigned; see
-[license status](LICENSE_PENDING.md). Manuscript citation details and permanent
-release links will be added when available.
+The PDLM software and model licenses are pending. See the
+[license status](LICENSE_PENDING.md). Manuscript citation details will be added
+when available.
 
 PDLM uses ESM2 from *Evolutionary-scale prediction of atomic-level protein
 structure with a language model*. See the
